@@ -104,6 +104,7 @@ def set_data_block(block_num: int, data, data_size,parent_inode:int,parent_block
         else:
             break
     fs.free_list[block_num] = 0
+    fs.s_block[0].free_blocks = fs.s_block[0].free_blocks - 1
 
     return fs
 
@@ -124,4 +125,3 @@ def read_temp_file(filename = DEFAULT_TEST_FILE_NAME):
 
 def delete_temp_file(filename=DEFAULT_TEST_FILE_NAME):
     os.remove(filename)
-
