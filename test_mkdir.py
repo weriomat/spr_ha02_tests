@@ -204,3 +204,16 @@ class Test_Mkdir:
         assert retval == 0
         retval = libc.fs_mkdir(ctypes.byref(fs), ctypes.c_char_p(bytes("/testDirectory/tmp/tmp","UTF-8"))) # inode num 8
         assert retval == -1
+
+    def test_mkdir_wrong_input(self):
+        fs = setup(5)
+        retval = libc.fs_mkdir(ctypes.byref(fs), None) 
+        assert retval == -1
+        retval = libc.fs_mkdir(None, None)
+        assert retval == -1
+        retval = libc.fs_mkdir(None, ctypes.c_char_p(bytes("/testDirectory","UTF-8"))) # inode num 8
+        assert retval == -1
+         # check every inode for default state
+        for i in range(1,5):
+            assert fs.inodes[i].name.decode("utf-8") =="" 
+            assert fs.inodes[i].n_type == 3 # meaning it is marked as free block

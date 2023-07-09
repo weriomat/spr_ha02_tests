@@ -238,3 +238,18 @@ class Test_Writef:
         assert fs.s_block[0].free_blocks == 4
         outstring = ctypes.c_char_p(ctypes.addressof(fs.data_blocks[0].block)).value #convert the raw data block to a string
         assert outstring.decode("utf-8") == teststring + teststring1 + teststring2 + teststring3 + teststring4 + teststring5
+
+    def test_writef_wrong_input(self):
+        fs = setup(5)
+        retval = libc.fs_writef(ctypes.byref(fs), None, None) 
+        assert retval == -1
+        retval = libc.fs_writef(None, None, None)
+        assert retval == -1
+        retval = libc.fs_writef(None, ctypes.c_char_p(bytes("/testDirectory","UTF-8")), None) # inode num 8
+        assert retval == -1
+        retval = libc.fs_writef(None, ctypes.c_char_p(bytes("/testDirectory","UTF-8")), ctypes.c_char_p(bytes("Hallo","utf-8"))) # inode num 8
+        assert retval == -1
+        retval = libc.fs_writef(None, None, ctypes.c_char_p(bytes("Hallo","utf-8"))) # inode num 8
+        assert retval == -1
+        retval = libc.fs_writef(ctypes.byref(fs), None, ctypes.c_char_p(bytes("Hallo","utf-8"))) # inode num 8
+        assert retval == -1

@@ -76,3 +76,23 @@ class Test_Readf:
         retval = libc.fs_readf(ctypes.byref(fs), ctypes.c_char_p(bytes("/fil1","utf-8")),ctypes.byref(file_length))
         assert file_length.value == len(teststring)
         assert retval.decode("utf-8") == teststring
+
+    def test_readf_wrong_input(self):
+        fs = setup(5)
+        retval = libc.fs_readf(ctypes.byref(fs), None, None) 
+        assert retval == None
+        retval = libc.fs_readf(None, None, None)
+        assert retval == None
+        retval = libc.fs_readf(None, ctypes.c_char_p(bytes("/testDirectory","UTF-8")), None) # inode num 8
+        assert retval == None
+        file_length = ctypes.c_int(0)
+        retval = libc.fs_readf(None, ctypes.c_char_p(bytes("/testDirectory","UTF-8")), ctypes.byref(file_length)) # inode num 8
+        assert retval == None
+        file_length = ctypes.c_int(0)
+        retval = libc.fs_readf(None, None, ctypes.byref(file_length)) # inode num 8
+        assert retval == None
+        assert file_length.value == 0
+        file_length = ctypes.c_int(0)
+        retval = libc.fs_readf(ctypes.byref(fs), None, ctypes.byref(file_length)) # inode num 8
+        assert retval == None
+        assert file_length.value == 0

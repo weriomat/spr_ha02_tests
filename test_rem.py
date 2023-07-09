@@ -118,3 +118,14 @@ class Test_Rem:
         assert retval == 0
         retval = libc.fs_rm(ctypes.byref(fs), ctypes.c_char_p(bytes("/firstDir","UTF-8")))
         assert retval == -1
+
+    def test_rem_wrong_input(self):
+        fs = setup(5)
+        retval = libc.fs_rm(ctypes.byref(fs), None) 
+        assert retval == -1
+        retval = libc.fs_rm(None, None)
+        assert retval == -1
+        retval = libc.fs_rm(None, ctypes.c_char_p(bytes("/testDirectory","UTF-8"))) # inode num 8
+        assert retval == -1
+
+

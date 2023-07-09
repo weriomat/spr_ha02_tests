@@ -75,3 +75,12 @@ class Test_List:
         libc.fs_list.restype = ctypes.c_char_p
         retval = libc.fs_list(ctypes.byref(fs), ctypes.c_char_p(bytes("/","UTF-8")))
         assert retval.decode("utf-8") == "DIR Dir1\nDIR Dir2\nDIR Dir3\nFIL Fil1\nFIL Fil2\n"
+    
+    def test_list_wrong_input(self):
+        fs = setup(5)
+        retval = libc.fs_list(ctypes.byref(fs), None) 
+        assert retval == None
+        retval = libc.fs_list(None, None)
+        assert retval == None
+        retval = libc.fs_list(None, ctypes.c_char_p(bytes("/testDirectory","UTF-8"))) # inode num 8
+        assert retval == None
