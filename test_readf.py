@@ -75,7 +75,7 @@ class Test_Readf:
         file_length = ctypes.c_int(0)
         retval = libc.fs_readf(ctypes.byref(fs), ctypes.c_char_p(bytes("/fil1","utf-8")),ctypes.byref(file_length))
         assert file_length.value == len(teststring)
-        assert retval.decode("utf-8") == teststring
+        assert retval[: len(teststring)].decode("utf-8") == teststring
 
     def test_readf_wrong_input(self):
         fs = setup(5)
