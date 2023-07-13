@@ -1,7 +1,9 @@
 # Tests for spr_ha_02
 
-## Capability: test_mkdir, test_mkfile, test_list, test_rem
+## Capability: test_mkdir, test_mkfile, test_list, test_rem, test_complex, test_import, text_export, test_readf, test_writef
 If u find other edge cases just msg and we will work it out
+
+## test_MkdirMkfile/ test_MkfileRmWriteRead contains test cases we do not have to cover -> if u have errors dont msg me just read description
 
 ## TODO: test_import, test_export, maybe add tests for NULL inputs but i cant be bothered lol
 
